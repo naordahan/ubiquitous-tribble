@@ -49,9 +49,9 @@ public class csvWriter {
 		private final String signal;
 
 		// Constructor
-		public Info(String[] column) {
+		public Info(String[] column,String path) {
 			time = column[3];
-			mod = column[2];
+			mod = getMod(path);// uses the function to get the model from every file
 			lat = column[6];
 			lon = column[7];
 			alt = column[8];
@@ -77,7 +77,7 @@ public class csvWriter {
 			int count = 0;
 			while ((line = br.readLine()) != null) {
 				String[] column = line.split(COMMA);
-				Info info = new Info(column);
+				Info info = new Info(column,path);
 				// sort by time first
 				if (count > 0 && !max[0].time.equals(info.time)) {
 					print(max, count, fileWriter);
@@ -115,7 +115,8 @@ public class csvWriter {
 			line = br.readLine();
 			String[] column = line.split(COMMA);
 			br.close();
-			return column[2];
+			String model=column[2].substring(6);// takes only the model from the whole line
+			return model;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Reading Error";
@@ -207,4 +208,5 @@ public class csvWriter {
 			e.printStackTrace();
 		}		
 	}
+	
 }
